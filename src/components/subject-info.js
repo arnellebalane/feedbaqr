@@ -7,7 +7,7 @@ const SubjectInfo = ({ subject }) => {
       <h1>{subject.title}</h1>
       <p>{subject.description}</p>
 
-      <QRCode value={subject.id} size="1000" />
+      <QRCode value={subject.id} size={1000} />
     </header>
   );
 };
