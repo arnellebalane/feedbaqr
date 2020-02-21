@@ -17,6 +17,7 @@
     "gatsby-transformer-sharp": "^2.3.13",
     "lodash": "4.17.15",
     "prop-types": "^15.7.2",
+    "qrcode.react": "1.0.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-helmet": "^5.2.1"
