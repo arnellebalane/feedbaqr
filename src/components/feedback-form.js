@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { firestore } from '../lib/firebase';
 
+import logo from '../images/logo.png';
+import '../styles/index.css';
+
 const FeedbackForm = ({ subject }) => {
   const [data, setData] = useState({ text: '', image: null });
 
@@ -25,9 +28,11 @@ const FeedbackForm = ({ subject }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
+    <form class="form" onSubmit={handleSubmit}>
+      <img id="logo" src={logo} />
+      <div class="input-container">
         <label>Text</label>
+        <br />
         <input
           type="text"
           name="text"
@@ -36,12 +41,16 @@ const FeedbackForm = ({ subject }) => {
         />
       </div>
 
-      <div>
+      <div class="input-container">
         <label>Image</label>
-        <input type="file" name="image" onChange={handleChange} />
-      </div>
+        <br />
+        <div class="upload-btn-wrapper">
+          <button class="btn">Upload a file</button>
+          <input type="file" name="image" onChange={handleChange} />
+        </div>
 
-      <button>Submit</button>
+      </div>
+      <button class="submit-button">Submit</button>
     </form>
   );
 };

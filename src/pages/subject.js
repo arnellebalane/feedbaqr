@@ -30,7 +30,7 @@ const SubjectPage = ({ location }) => {
   if (subject) {
     return (
       <>
-        <SubjectInfo subject={subject} />
+        {/* <SubjectInfo subject={subject} /> */}
         <FeedbackList feedbacks={subject.feedbacks} />
         <FeedbackForm subject={subject} />
       </>
