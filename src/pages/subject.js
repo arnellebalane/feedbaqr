@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { navigate } from 'gatsby';
-import { firestore } from '../lib/firebase';
+import { FirebaseContext } from 'gatsby-plugin-firebase';
 import SubjectInfo from '../components/subject-info';
 import FeedbackList from '../components/feedback-list';
 import FeedbackForm from '../components/feedback-form';
@@ -8,10 +8,17 @@ import FeedbackForm from '../components/feedback-form';
 import '../styles/index.css';
 
 const SubjectPage = ({ location }) => {
+  const firebase = useContext(FirebaseContext);
   const [subject, setSubject] = useState(null);
 
   useEffect(() => {
     (async () => {
+      if (!firebase) {
+        return;
+      }
+
+      const firestore = firebase.firestore();
+
       const subjectId = location.search.substring(4);
       const subjectRef = firestore.doc(`subjects/${subjectId}`);
       const subjectSnapshot = await subjectRef.get();
@@ -33,7 +40,13 @@ const SubjectPage = ({ location }) => {
         setSubject({ ...data, feedbacks });
       });
     })();
-  }, [location.search]);
+  }, [location.search, firebase]);
+
+  if (!firebase) {
+    return null;
+  }
+
+  const firestore = firebase.firestore();
 
   if (subject) {
     return (

@@ -27,8 +27,32 @@ module.exports = {
         icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
       },
     },
+    {
+      resolve: 'gatsby-plugin-firebase',
+      options: {
+        features: {
+          auth: false,
+          database: false,
+          firestore: true,
+          storage: true,
+          messaging: false,
+          functions: false,
+          performance: false,
+        },
+        credentials: {
+          apiKey: 'AIzaSyBXewH-sBCdokkUVKqmgnFpNB72Jesoqu4',
+          authDomain: 'feedbaqr.firebaseapp.com',
+          databaseURL: 'https://feedbaqr.firebaseio.com',
+          projectId: 'feedbaqr',
+          storageBucket: 'feedbaqr.appspot.com',
+          messagingSenderId: '900927958030',
+          appId: '1:900927958030:web:cf48a72c686cc3d229a05f',
+          measurementId: 'G-T9H3Z3DV63',
+        },
+      },
+    },
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,
   ],
-}
+};

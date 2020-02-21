@@ -1,10 +1,14 @@
-import React, { useState, useRef } from 'react';
-import { firestore, storage } from '../lib/firebase';
+import React, { useState, useRef, useContext } from 'react';
+import { FirebaseContext } from 'gatsby-plugin-firebase';
 
 import logo from '../images/logo.png';
 import '../styles/index.css';
 
 const FeedbackForm = ({ subject }) => {
+  const firebase = useContext(FirebaseContext);
+  const firestore = firebase.firestore();
+  const storage = firebase.storage();
+
   const [data, setData] = useState({ text: '', image: null });
   const [loading, setLoading] = useState(false);
   const fileElementRef = useRef(null);

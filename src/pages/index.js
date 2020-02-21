@@ -1,12 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { navigate } from 'gatsby';
-import firebase, { firestore } from '../lib/firebase';
+import { FirebaseContext } from 'gatsby-plugin-firebase';
 import logo from '../images/logo.png';
 import '../styles/index.css';
 
 const IndexPage = () => {
+  const firebase = useContext(FirebaseContext);
   const [data, setData] = useState({ title: '', description: '' });
   const [loading, setLoading] = useState(false);
+
+  if (!firebase) {
+    return null;
+  }
+
+  const firestore = firebase.firestore();
   const enableSubmit = data.title.trim() && !loading;
 
   const handleChange = event => {
@@ -54,8 +61,10 @@ const IndexPage = () => {
         ></textarea>
       </div>
 
-      <button disabled={!enableSubmit} className="generate-button">Create FeedbaQR</button>
-    </form >
+      <button disabled={!enableSubmit} className="generate-button">
+        Create FeedbaQR
+      </button>
+    </form>
   );
 };
 
