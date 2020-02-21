@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { navigate } from 'gatsby';
-import firebase, { firestore } from '../lib/firebase';
+import { firestore } from '../lib/firebase';
 
 const IndexPage = () => {
   const [data, setData] = useState({ title: '', description: '' });
+  const [loading, setLoading] = useState(false);
+  const enableSubmit = data.title.trim() && !loading;
 
   const handleChange = event => {
     const key = event.target.name;
@@ -12,6 +14,7 @@ const IndexPage = () => {
 
   const handleSubmit = async event => {
     event.preventDefault();
+    setLoading(true);
     const subjectsRef = firestore.collection('subjects');
     const ref = await subjectsRef.add({
       ...data,
@@ -23,26 +26,30 @@ const IndexPage = () => {
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <label>Title</label>
+        <label for="title">Title</label>
         <input
+          id="title"
           type="text"
           name="title"
           value={data.title}
           onChange={handleChange}
+          disabled={loading}
           required
         />
       </div>
 
       <div>
-        <label>Description</label>
+        <label for="description">Description</label>
         <textarea
+          id="description"
           name="description"
           value={data.description}
           onChange={handleChange}
+          disabled={loading}
         ></textarea>
       </div>
 
-      <button>Generate</button>
+      <button disabled={!enableSubmit}>Generate</button>
     </form>
   );
 };

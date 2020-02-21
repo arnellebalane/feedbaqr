@@ -3,6 +3,8 @@ import { firestore, storage } from '../lib/firebase';
 
 const FeedbackForm = ({ subject }) => {
   const [data, setData] = useState({ text: '', image: null });
+  const [loading, setLoading] = useState(false);
+  const enableSubmit = (data.text || data.image) && !loading;
 
   const handleChange = event => {
     let { type, name, value, files } = event.target;
@@ -12,6 +14,8 @@ const FeedbackForm = ({ subject }) => {
 
   const handleSubmit = async event => {
     event.preventDefault();
+
+    setLoading(true);
 
     const feedbacksRef = firestore
       .doc(`subjects/${subject.id}`)
@@ -30,6 +34,7 @@ const FeedbackForm = ({ subject }) => {
     }
 
     setData({ text: '', image: null });
+    setLoading(false);
   };
 
   return (
@@ -41,15 +46,21 @@ const FeedbackForm = ({ subject }) => {
           name="text"
           value={data.text}
           onChange={handleChange}
+          disabled={loading}
         />
       </div>
 
       <div>
         <label>Image</label>
-        <input type="file" name="image" onChange={handleChange} />
+        <input
+          type="file"
+          name="image"
+          onChange={handleChange}
+          disabled={loading}
+        />
       </div>
 
-      <button>Submit</button>
+      <button disabled={!enableSubmit}>Submit</button>
     </form>
   );
 };
