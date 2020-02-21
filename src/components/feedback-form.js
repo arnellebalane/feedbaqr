@@ -73,7 +73,7 @@ const FeedbackForm = ({ subject }) => {
         </div>
 
       </div>
-      <button disabled={!enableSubmit} className="submit-button">Submit</button>
+      <button disabled={!enableSubmit} className="generate-button submit">Submit</button>
     </form>
   );
 };

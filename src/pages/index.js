@@ -54,7 +54,7 @@ const IndexPage = () => {
         ></textarea>
       </div>
 
-      <button disabled={!enableSubmit} className="submit-button">Create FeedbaQR</button>
+      <button disabled={!enableSubmit} className="generate-button">Create FeedbaQR</button>
     </form >
   );
 };

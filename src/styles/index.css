@@ -45,7 +45,7 @@ input, textarea {
     width: 120px;
 }
 
-.submit-button {
+.generate-button {
     background-color: black;
     outline: none;
     border: none;
@@ -55,6 +55,10 @@ input, textarea {
     margin-top: 20px;
     cursor: pointer;
     width: 100%;
+}
+
+.submit {
+    width: 200px;
 }
 
 .upload-btn-wrapper {
