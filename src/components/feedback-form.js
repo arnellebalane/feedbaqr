@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { firestore } from '../lib/firebase';
 
-const FeedbackForm = () => {
+const FeedbackForm = ({ subject }) => {
   const [data, setData] = useState({ text: '', image: null });
 
   const handleChange = event => {
@@ -9,9 +10,15 @@ const FeedbackForm = () => {
     setData({ ...data, [name]: value });
   };
 
-  const handleSubmit = event => {
+  const handleSubmit = async event => {
     event.preventDefault();
-    console.log(data);
+
+    const feedbacksRef = firestore
+      .doc(`subjects/${subject.id}`)
+      .collection('feedbacks');
+    await feedbacksRef.add(data);
+
+    setData({ text: '', image: null });
   };
 
   return (

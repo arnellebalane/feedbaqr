@@ -1,31 +1,40 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { firestore } from '../lib/firebase';
 import SubjectInfo from '../components/subject-info';
 import FeedbackList from '../components/feedback-list';
 import FeedbackForm from '../components/feedback-form';
 
-const SubjectPage = () => {
-  const subject = {
-    title: 'Test Subject',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem aliquid voluptatibus dignissimos necessitatibus possimus illo dolorum ea, quod nulla ad praesentium aperiam adipisci labore quo consectetur eos quos culpa recusandae.',
+const SubjectPage = ({ location }) => {
+  const [subject, setSubject] = useState(null);
 
-    feedbacks: [
-      {
-        text: 'Hello world',
-      },
-      {
-        text: 'Lorem ipsum',
-      },
-    ],
-  };
+  useEffect(() => {
+    (async () => {
+      const subjectId = location.search.substring(4);
+      const subjectRef = firestore.doc(`subjects/${subjectId}`);
+      const subjectSnapshot = await subjectRef.get();
+      const data = { ...subjectSnapshot.data(), id: subjectId };
+      setSubject(data);
 
-  return (
-    <>
-      <SubjectInfo subject={subject} />
-      <FeedbackList feedbacks={subject.feedbacks} />
-      <FeedbackForm />
-    </>
-  );
+      const feedbackRef = subjectRef.collection('feedbacks');
+      const feedbackSnapshot = await feedbackRef.get();
+      const feedbacks = feedbackSnapshot.docs.map(docSnapshot =>
+        docSnapshot.data()
+      );
+      setSubject({ ...data, feedbacks });
+    })();
+  }, []);
+
+  if (subject) {
+    return (
+      <>
+        <SubjectInfo subject={subject} />
+        <FeedbackList feedbacks={subject.feedbacks} />
+        <FeedbackForm subject={subject} />
+      </>
+    );
+  }
+
+  return <p>Loading...</p>;
 };
 
 export default SubjectPage;

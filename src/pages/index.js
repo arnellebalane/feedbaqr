@@ -13,7 +13,7 @@ const IndexPage = () => {
   const handleSubmit = async event => {
     event.preventDefault();
     const subjectsRef = firestore.collection('subjects');
-    const ref = await subjectsRef.add({ ...data, feedbacks: [] });
+    const ref = await subjectsRef.add(data);
     navigate(`/subject/?id=${ref.id}`);
   };
 
