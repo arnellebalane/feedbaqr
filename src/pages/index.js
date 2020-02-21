@@ -1,21 +1,43 @@
-import React from "react"
-import { Link } from "gatsby"
+import React, { useState } from 'react';
 
-import Layout from "../components/layout"
-import Image from "../components/image"
-import SEO from "../components/seo"
+const IndexPage = () => {
+  const [data, setData] = useState({ title: '', description: '' });
 
-const IndexPage = () => (
-  <Layout>
-    <SEO title="Home" />
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
-      <Image />
-    </div>
-    <Link to="/page-2/">Go to page 2</Link>
-  </Layout>
-)
+  const handleChange = event => {
+    const key = event.target.name;
+    setData({ ...data, [key]: event.target.value });
+  };
 
-export default IndexPage
+  const handleSubmit = event => {
+    event.preventDefault();
+    console.log(data);
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label>Title</label>
+        <input
+          type="text"
+          name="title"
+          value={data.title}
+          onChange={handleChange}
+          required
+        />
+      </div>
+
+      <div>
+        <label>Description</label>
+        <textarea
+          name="description"
+          value={data.description}
+          onChange={handleChange}
+        ></textarea>
+      </div>
+
+      <button>Generate</button>
+    </form>
+  );
+};
+
+export default IndexPage;
