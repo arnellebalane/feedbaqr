@@ -5,6 +5,7 @@
   "version": "0.1.0",
   "author": "Kyle Mathews <mathews.kyle@gmail.com>",
   "dependencies": {
+    "cloudinary-react": "1.3.0",
     "firebase": "7.9.0",
     "gatsby": "^2.19.7",
     "gatsby-image": "^2.2.39",

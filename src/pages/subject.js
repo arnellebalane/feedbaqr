@@ -25,7 +25,7 @@ const SubjectPage = ({ location }) => {
         setSubject({ ...data, feedbacks });
       });
     })();
-  }, []);
+  }, [location.search]);
 
   if (subject) {
     return (
