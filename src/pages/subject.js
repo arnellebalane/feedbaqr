@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { navigate } from 'gatsby';
 import { firestore } from '../lib/firebase';
 import SubjectInfo from '../components/subject-info';
 import FeedbackList from '../components/feedback-list';
@@ -12,6 +13,11 @@ const SubjectPage = ({ location }) => {
       const subjectId = location.search.substring(4);
       const subjectRef = firestore.doc(`subjects/${subjectId}`);
       const subjectSnapshot = await subjectRef.get();
+
+      if (!subjectSnapshot.exists) {
+        return navigate('/');
+      }
+
       const data = { ...subjectSnapshot.data(), id: subjectId };
       setSubject(data);
 
@@ -25,12 +31,12 @@ const SubjectPage = ({ location }) => {
         setSubject({ ...data, feedbacks });
       });
     })();
-  }, []);
+  }, [location.search]);
 
   if (subject) {
     return (
       <>
-        {/* <SubjectInfo subject={subject} /> */}
+        <SubjectInfo subject={subject} />
         <FeedbackList feedbacks={subject.feedbacks} />
         <FeedbackForm subject={subject} />
       </>

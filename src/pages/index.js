@@ -6,6 +6,8 @@ import '../styles/index.css';
 
 const IndexPage = () => {
   const [data, setData] = useState({ title: '', description: '' });
+  const [loading, setLoading] = useState(false);
+  const enableSubmit = data.title.trim() && !loading;
 
   const handleChange = event => {
     const key = event.target.name;
@@ -14,6 +16,7 @@ const IndexPage = () => {
 
   const handleSubmit = async event => {
     event.preventDefault();
+    setLoading(true);
     const subjectsRef = firestore.collection('subjects');
     const ref = await subjectsRef.add({
       ...data,
@@ -23,31 +26,35 @@ const IndexPage = () => {
   };
 
   return (
-    <form class="form" onSubmit={handleSubmit}>
+    <form className="form" onSubmit={handleSubmit}>
       <img id="logo" src={logo} />
-      <div class="input-container">
+      <div className="input-container">
         <label>Title</label>
         <br />
         <input
+          id="title"
           type="text"
           name="title"
           value={data.title}
           onChange={handleChange}
+          disabled={loading}
           required
         />
       </div>
 
-      <div class="input-container">
+      <div className="input-container">
         <label>Description</label>
         <br />
         <textarea
+          id="description"
           name="description"
           value={data.description}
           onChange={handleChange}
+          disabled={loading}
         ></textarea>
       </div>
 
-      <button class="submit-button">Create FeedbaQR</button>
+      <button disabled={!enableSubmit} className="submit-button">Create FeedbaQR</button>
     </form >
   );
 };

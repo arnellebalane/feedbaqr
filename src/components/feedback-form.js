@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
-import { firestore } from '../lib/firebase';
+import React, { useState, useRef } from 'react';
+import { firestore, storage } from '../lib/firebase';
 
 import logo from '../images/logo.png';
 import '../styles/index.css';
 
 const FeedbackForm = ({ subject }) => {
   const [data, setData] = useState({ text: '', image: null });
+  const [loading, setLoading] = useState(false);
+  const fileElementRef = useRef(null);
+  const enableSubmit = (data.text || data.image) && !loading;
 
   const handleChange = event => {
     let { type, name, value, files } = event.target;
@@ -16,41 +19,62 @@ const FeedbackForm = ({ subject }) => {
   const handleSubmit = async event => {
     event.preventDefault();
 
+    setLoading(true);
+
     const feedbacksRef = firestore
       .doc(`subjects/${subject.id}`)
       .collection('feedbacks');
-    await feedbacksRef.add({
-      ...data,
+
+    const ref = await feedbacksRef.add({
+      text: data.text,
       createdOn: new Date(),
     });
 
+    if (data.image) {
+      const fileRef = storage.ref(ref.id);
+      await fileRef.put(data.image);
+      const url = await fileRef.getDownloadURL();
+      await ref.update({ image: url });
+    }
+
+    fileElementRef.current.value = null;
     setData({ text: '', image: null });
+    setLoading(false);
   };
 
   return (
-    <form class="form" onSubmit={handleSubmit}>
+    <form className="form" onSubmit={handleSubmit}>
       <img id="logo" src={logo} />
-      <div class="input-container">
+      <div className="input-container">
         <label>Text</label>
         <br />
         <input
+          id="text"
           type="text"
           name="text"
           value={data.text}
           onChange={handleChange}
+          disabled={loading}
         />
       </div>
 
-      <div class="input-container">
+      <div className="input-container">
         <label>Image</label>
         <br />
-        <div class="upload-btn-wrapper">
-          <button class="btn">Upload a file</button>
-          <input type="file" name="image" onChange={handleChange} />
+        <div className="upload-btn-wrapper">
+          <button className="btn">Upload a file</button>
+          <input
+            id="image"
+            type="file"
+            name="image"
+            ref={fileElementRef}
+            onChange={handleChange}
+            disabled={loading}
+          />
         </div>
 
       </div>
-      <button class="submit-button">Submit</button>
+      <button disabled={!enableSubmit} className="submit-button">Submit</button>
     </form>
   );
 };
