@@ -73,6 +73,7 @@ input, textarea {
     padding: 8px 20px;
     border-radius: 8px;
     border: 1px solid black;
+    width: 250px;
   }
   
   .upload-btn-wrapper input[type=file] {
@@ -93,4 +94,17 @@ input, textarea {
 
   .subjects-wrapper {
       margin: 20px;
+  }
+
+  .feedback-item {
+    background-color: white;
+    width: 200px;
+    text-align: center;
+    border-radius: 20px;
+    padding: 10px;
+    margin: 10px;
+  }
+
+  .feedback-list {
+      display: flex;
   }

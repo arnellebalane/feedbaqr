@@ -47,7 +47,7 @@ const FeedbackForm = ({ subject }) => {
       <div className="input-container">
         <label>Text</label>
         <br />
-        <input
+        <textarea
           id="text"
           type="text"
           name="text"

@@ -1,24 +1,28 @@
 import React from 'react';
 import { Image } from 'cloudinary-react';
+import logo from '../images/logo.png';
 
 const FeedbackList = ({ feedbacks }) => {
   if (feedbacks) {
     return (
-      <ul>
-        {feedbacks.map((feedback, i) => (
-          <li key={i}>
-            {feedback.text && <p>{feedback.text}</p>}
-            {feedback.image && (
-              <Image
-                cloudName="feedbaqr"
-                publicId={feedback.image}
-                width="300"
-                crop="scale"
-              />
-            )}
-          </li>
-        ))}
-      </ul>
+      <>
+        <p>Feedbacks</p>
+        <ul className="feedback-list">
+          {feedbacks.map((feedback, i) => (
+            <li className="feedback-item" key={i}>
+              {feedback.text && <p>{feedback.text}</p>}
+              {feedback.image && (
+                <Image
+                  cloudName="feedbaqr"
+                  publicId={feedback.image}
+                  width="100"
+                  crop="scale"
+                />
+              )}
+            </li>
+          ))}
+        </ul>
+      </>
     );
   }
 
