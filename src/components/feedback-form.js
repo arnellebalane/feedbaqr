@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { firestore } from '../lib/firebase';
+import { firestore, storage } from '../lib/firebase';
 
 const FeedbackForm = ({ subject }) => {
   const [data, setData] = useState({ text: '', image: null });
@@ -16,10 +16,18 @@ const FeedbackForm = ({ subject }) => {
     const feedbacksRef = firestore
       .doc(`subjects/${subject.id}`)
       .collection('feedbacks');
-    await feedbacksRef.add({
-      ...data,
+
+    const ref = await feedbacksRef.add({
+      text: data.text,
       createdOn: new Date(),
     });
+
+    if (data.image) {
+      const fileRef = storage.ref(ref.id);
+      await fileRef.put(data.image);
+      const url = await fileRef.getDownloadURL();
+      await ref.update({ image: url });
+    }
 
     setData({ text: '', image: null });
   };
