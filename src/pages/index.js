@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { navigate } from 'gatsby';
+import { firestore } from '../lib/firebase';
 
 const IndexPage = () => {
   const [data, setData] = useState({ title: '', description: '' });
@@ -8,9 +10,11 @@ const IndexPage = () => {
     setData({ ...data, [key]: event.target.value });
   };
 
-  const handleSubmit = event => {
+  const handleSubmit = async event => {
     event.preventDefault();
-    console.log(data);
+    const subjectsRef = firestore.collection('subjects');
+    const ref = await subjectsRef.add({ ...data, feedbacks: [] });
+    navigate(`/subject/?id=${ref.id}`);
   };
 
   return (
