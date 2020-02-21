@@ -15,14 +15,15 @@ const SubjectPage = ({ location }) => {
       const data = { ...subjectSnapshot.data(), id: subjectId };
       setSubject(data);
 
-      const feedbackRef = subjectRef.collection('feedbacks');
-      const feedbackSnapshot = await feedbackRef
-        .orderBy('createdOn', 'desc')
-        .get();
-      const feedbacks = feedbackSnapshot.docs.map(docSnapshot =>
-        docSnapshot.data()
-      );
-      setSubject({ ...data, feedbacks });
+      const feedbackRef = subjectRef
+        .collection('feedbacks')
+        .orderBy('createdOn', 'desc');
+      feedbackRef.onSnapshot(feedbackSnapshot => {
+        const feedbacks = feedbackSnapshot.docs.map(docSnapshot =>
+          docSnapshot.data()
+        );
+        setSubject({ ...data, feedbacks });
+      });
     })();
   }, []);
 
