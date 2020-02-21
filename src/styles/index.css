@@ -3,6 +3,14 @@ body {
     background-color: #f2f2f2;
 }
 
+h3, p {
+    margin: 0;
+}
+
+ul {
+    list-style-type: none;
+  }
+
 .form {
     position: absolute;
     background-color: white;
@@ -31,6 +39,10 @@ input, textarea {
 #logo {
     width: 300px;
     margin: 0;
+}
+
+#logo-small {
+    width: 120px;
 }
 
 .submit-button {
@@ -65,4 +77,16 @@ input, textarea {
     left: 0;
     top: 0;
     opacity: 0;
+  }
+
+  .header-wrapper {
+    display: flex;
+  }
+
+  .description-wrapper {
+      margin-left: 20px;
+  }
+
+  .subjects-wrapper {
+      margin: 20px;
   }

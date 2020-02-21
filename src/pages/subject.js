@@ -5,6 +5,8 @@ import SubjectInfo from '../components/subject-info';
 import FeedbackList from '../components/feedback-list';
 import FeedbackForm from '../components/feedback-form';
 
+import '../styles/index.css';
+
 const SubjectPage = ({ location }) => {
   const [subject, setSubject] = useState(null);
 
@@ -35,11 +37,11 @@ const SubjectPage = ({ location }) => {
 
   if (subject) {
     return (
-      <>
+      <div className="subjects-wrapper">
         <SubjectInfo subject={subject} />
-        <FeedbackList feedbacks={subject.feedbacks} />
         <FeedbackForm subject={subject} />
-      </>
+        <FeedbackList feedbacks={subject.feedbacks} />
+      </div>
     );
   }
 

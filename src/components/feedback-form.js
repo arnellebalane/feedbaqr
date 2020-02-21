@@ -43,8 +43,7 @@ const FeedbackForm = ({ subject }) => {
   };
 
   return (
-    <form className="form" onSubmit={handleSubmit}>
-      <img id="logo" src={logo} />
+    <form onSubmit={handleSubmit}>
       <div className="input-container">
         <label>Text</label>
         <br />
