@@ -16,7 +16,9 @@ const SubjectPage = ({ location }) => {
       setSubject(data);
 
       const feedbackRef = subjectRef.collection('feedbacks');
-      const feedbackSnapshot = await feedbackRef.get();
+      const feedbackSnapshot = await feedbackRef
+        .orderBy('createdOn', 'desc')
+        .get();
       const feedbacks = feedbackSnapshot.docs.map(docSnapshot =>
         docSnapshot.data()
       );

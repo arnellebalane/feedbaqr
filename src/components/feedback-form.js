@@ -16,7 +16,10 @@ const FeedbackForm = ({ subject }) => {
     const feedbacksRef = firestore
       .doc(`subjects/${subject.id}`)
       .collection('feedbacks');
-    await feedbacksRef.add(data);
+    await feedbacksRef.add({
+      ...data,
+      createdOn: new Date(),
+    });
 
     setData({ text: '', image: null });
   };

@@ -13,5 +13,6 @@ firebase.initializeApp({
   measurementId: 'G-T9H3Z3DV63',
 });
 
+export default firebase;
 export const firestore = firebase.firestore();
 export const storage = firebase.storage();
