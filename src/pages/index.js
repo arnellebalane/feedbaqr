@@ -26,7 +26,7 @@ const IndexPage = () => {
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <label for="title">Title</label>
+        <label htmlFor="title">Title</label>
         <input
           id="title"
           type="text"
@@ -39,7 +39,7 @@ const IndexPage = () => {
       </div>
 
       <div>
-        <label for="description">Description</label>
+        <label htmlFor="description">Description</label>
         <textarea
           id="description"
           name="description"

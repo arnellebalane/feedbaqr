@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { firestore, storage } from '../lib/firebase';
 
 const FeedbackForm = ({ subject }) => {
   const [data, setData] = useState({ text: '', image: null });
   const [loading, setLoading] = useState(false);
+  const fileElementRef = useRef(null);
   const enableSubmit = (data.text || data.image) && !loading;
 
   const handleChange = event => {
@@ -33,6 +34,7 @@ const FeedbackForm = ({ subject }) => {
       await ref.update({ image: url });
     }
 
+    fileElementRef.current.value = null;
     setData({ text: '', image: null });
     setLoading(false);
   };
@@ -40,8 +42,9 @@ const FeedbackForm = ({ subject }) => {
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <label>Text</label>
+        <label htmlFor="text">Text</label>
         <input
+          id="text"
           type="text"
           name="text"
           value={data.text}
@@ -51,10 +54,12 @@ const FeedbackForm = ({ subject }) => {
       </div>
 
       <div>
-        <label>Image</label>
+        <label htmlFor="image">Image</label>
         <input
+          id="image"
           type="file"
           name="image"
+          ref={fileElementRef}
           onChange={handleChange}
           disabled={loading}
         />
