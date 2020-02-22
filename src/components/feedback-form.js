@@ -75,9 +75,10 @@ const FeedbackForm = ({ subject }) => {
             disabled={loading}
           />
         </div>
-
       </div>
-      <button disabled={!enableSubmit} className="generate-button submit">Submit</button>
+      <button disabled={!enableSubmit} className="generate-button submit">
+        Submit
+      </button>
     </form>
   );
 };
