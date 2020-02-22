@@ -5,7 +5,7 @@ import logo from '../images/logo.png';
 import '../styles/index.css';
 
 const SubjectInfo = ({ subject }) => {
-  const url = `${location.origin}/subject/?id=${subject.id}`;
+  const url = `${window.location.origin}/subject/?id=${subject.id}`;
 
   return (
     <div class="main-wrapper">
