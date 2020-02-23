@@ -1,6 +1,9 @@
 import React from 'react';
 import { navigate } from 'gatsby';
+
 import useSubject from '../lib/use-subject';
+import Layout from '../components/layout';
+import SEO from '../components/seo';
 import SubjectDetails from '../components/subject-details';
 import FeedbackList from '../components/feedback-list';
 import FeedbackForm from '../components/feedback-form';
@@ -21,11 +24,15 @@ const SubjectPage = ({ location }) => {
   }
 
   return (
-    <div className="subjects-wrapper">
-      <SubjectDetails subject={subject} />
-      <FeedbackForm subject={subject} />
-      <FeedbackList feedbacks={subject.feedbacks} />
-    </div>
+    <Layout>
+      <SEO title={subject.title} description={subject.description} />
+
+      <div className="subjects-wrapper">
+        <SubjectDetails subject={subject} />
+        <FeedbackForm subject={subject} />
+        <FeedbackList feedbacks={subject.feedbacks} />
+      </div>
+    </Layout>
   );
 };
 
