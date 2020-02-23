@@ -1,11 +1,11 @@
 import { useState, useEffect, useContext } from 'react';
 import { FirebaseContext } from 'gatsby-plugin-firebase';
-import firebase from 'firebase';
+import Firebase from 'firebase';
 import mapValues from 'lodash/mapValues';
 
 function convertTimestampsToDate(object) {
   return mapValues(object, value => {
-    if (value instanceof firebase.firestore.Timestamp) {
+    if (value instanceof Firebase.firestore.Timestamp) {
       return value.toDate();
     }
     return value;
@@ -27,7 +27,7 @@ export const useSubjectCreator = () => {
     const subjectsRef = firebase.firestore().collection('subjects');
     const subjectRef = await subjectsRef.add({
       ...subjectData,
-      createdOn: new Date(),
+      createdOn: Firebase.firestore.FieldValue.serverTimestamp(),
     });
 
     setLoading(false);
@@ -98,7 +98,7 @@ export const useFeedbackCreator = subject => {
 
     const feedbackRef = await feedbacksRef.add({
       text: feedbackData.text,
-      createdOn: new Date(),
+      createdOn: Firebase.firestore.FieldValue.serverTimestamp(),
     });
 
     if (feedbackData.image) {
