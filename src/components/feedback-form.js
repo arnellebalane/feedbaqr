@@ -1,44 +1,50 @@
 import React, { useState, useRef, useContext } from 'react';
 import { FirebaseContext } from 'gatsby-plugin-firebase';
-
-import logo from '../images/logo.png';
 import '../styles/index.css';
 
 const FeedbackForm = ({ subject }) => {
   const firebase = useContext(FirebaseContext);
-  const firestore = firebase.firestore();
-  const storage = firebase.storage();
-
   const [data, setData] = useState({ text: '', image: null });
   const [loading, setLoading] = useState(false);
   const fileElementRef = useRef(null);
+
+  // On first render, the value provided in FirebaseContext is null, and we
+  // need to handle this ourselves.
+  // https://www.gatsbyjs.org/packages/gatsby-plugin-firebase/#firebasecontext
+  if (!firebase) return null;
+
   const enableSubmit = (data.text || data.image) && !loading;
 
   const handleChange = event => {
     let { type, name, value, files } = event.target;
-    value = type === 'file' ? files[0] : value;
-    setData({ ...data, [name]: value });
+    if (data.hasOwnProperty(name)) {
+      value = type === 'file' ? files[0] : value;
+      setData({ ...data, [name]: value });
+    }
   };
 
   const handleSubmit = async event => {
     event.preventDefault();
-
     setLoading(true);
 
-    const feedbacksRef = firestore
+    const feedbacksRef = firebase
+      .firestore()
       .doc(`subjects/${subject.id}`)
       .collection('feedbacks');
 
-    const ref = await feedbacksRef.add({
+    const feedbackRef = await feedbacksRef.add({
       text: data.text,
       createdOn: new Date(),
     });
 
     if (data.image) {
-      const fileRef = storage.ref(ref.id);
+      const fileType = data.image.type.replace(/^image\//, '');
+      const fileName = `${feedbackRef.id}.${fileType}`;
+      const fileRef = firebase.storage().ref(fileName);
+
       await fileRef.put(data.image);
-      const url = await fileRef.getDownloadURL();
-      await ref.update({ image: url });
+      const fileUrl = await fileRef.getDownloadURL();
+      await feedbackRef.update({ image: fileUrl });
     }
 
     fileElementRef.current.value = null;
@@ -49,7 +55,7 @@ const FeedbackForm = ({ subject }) => {
   return (
     <form onSubmit={handleSubmit}>
       <div className="input-container">
-        <label>Text</label>
+        <label htmlFor="text">Text</label>
         <br />
         <textarea
           id="text"
@@ -62,7 +68,7 @@ const FeedbackForm = ({ subject }) => {
       </div>
 
       <div className="input-container">
-        <label>Image</label>
+        <label htmlFor="image">Image</label>
         <br />
         <div className="upload-btn-wrapper">
           <button className="btn">Upload a file</button>
@@ -70,12 +76,14 @@ const FeedbackForm = ({ subject }) => {
             id="image"
             type="file"
             name="image"
+            accept="image/*"
             ref={fileElementRef}
             onChange={handleChange}
             disabled={loading}
           />
         </div>
       </div>
+
       <button disabled={!enableSubmit} className="generate-button submit">
         Submit
       </button>
