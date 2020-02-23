@@ -1,11 +1,10 @@
 import { useState, useEffect, useContext } from 'react';
 import { FirebaseContext } from 'gatsby-plugin-firebase';
-import Firebase from 'firebase';
 import mapValues from 'lodash/mapValues';
 
-const convertTimestampsToDate = object => {
+const convertTimestampsToDate = (firebase, object) => {
   return mapValues(object, value => {
-    if (value instanceof Firebase.firestore.Timestamp) {
+    if (value instanceof firebase.firestore.Timestamp) {
       return value.toDate();
     }
     return value;
@@ -27,7 +26,7 @@ export const useSubjectCreator = () => {
     const subjectsRef = firebase.firestore().collection('subjects');
     const subjectRef = await subjectsRef.add({
       ...subjectData,
-      createdOn: Firebase.firestore.FieldValue.serverTimestamp(),
+      createdOn: firebase.firestore.FieldValue.serverTimestamp(),
     });
 
     setLoading(false);
@@ -53,7 +52,7 @@ export const useSubjectFetcher = subjectId => {
       setExists(subjectExists);
       if (!subjectExists) return null;
 
-      const subjectData = convertTimestampsToDate({
+      const subjectData = convertTimestampsToDate(firebase, {
         ...subjectSnapshot.data(),
         id: subjectId,
       });
@@ -64,7 +63,7 @@ export const useSubjectFetcher = subjectId => {
         .orderBy('createdOn', 'desc');
       feedbacksRef.onSnapshot(feedbackSnapshot => {
         const feedbacks = feedbackSnapshot.docs.map(docSnapshot =>
-          convertTimestampsToDate(docSnapshot.data())
+          convertTimestampsToDate(firebase, docSnapshot.data())
         );
         setSubject({ ...subjectData, feedbacks });
       });
@@ -98,7 +97,7 @@ export const useFeedbackCreator = subject => {
 
     const feedbackRef = await feedbacksRef.add({
       text: feedbackData.text,
-      createdOn: Firebase.firestore.FieldValue.serverTimestamp(),
+      createdOn: firebase.firestore.FieldValue.serverTimestamp(),
     });
 
     if (feedbackData.image) {
