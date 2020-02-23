@@ -34,7 +34,7 @@ const FeedbackList = ({ feedbacks }) => {
 };
 
 FeedbackList.propTypes = {
-  feedbacks: PropTypes.arrayOf(FeedbackPropType).isRequired,
+  feedbacks: PropTypes.arrayOf(FeedbackPropType),
 };
 
 export default FeedbackList;

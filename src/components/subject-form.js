@@ -1,19 +1,16 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { FirebaseContext } from 'gatsby-plugin-firebase';
 
+import { useSubjectCreator } from '../lib/firebase-hooks';
 import logo from '../images/logo.png';
 import '../styles/index.css';
 
 const SubjectForm = ({ onSubmit }) => {
-  const firebase = useContext(FirebaseContext);
   const [data, setData] = useState({ title: '', description: '' });
-  const [loading, setLoading] = useState(false);
+  const subjectCreator = useSubjectCreator();
 
-  // On first render, the value provided in FirebaseContext is null, and we
-  // need to handle this ourselves.
-  // https://www.gatsbyjs.org/packages/gatsby-plugin-firebase/#firebasecontext
-  if (!firebase) return null;
+  if (!subjectCreator) return null;
+  const { loading, createSubject } = subjectCreator;
 
   const enableSubmit = data.title.trim() && !loading;
 
@@ -26,15 +23,10 @@ const SubjectForm = ({ onSubmit }) => {
 
   const handleSubmit = async event => {
     event.preventDefault();
-    setLoading(true);
 
-    const subjectData = { ...data, createdOn: new Date() };
-    const subjectsRef = firebase.firestore().collection('subjects');
-    const subjectRef = await subjectsRef.add(subjectData);
-
-    setLoading(false);
+    const subject = await createSubject(data);
     if (typeof onSubmit === 'function') {
-      onSubmit({ ...subjectData, id: subjectRef.id });
+      onSubmit(subject);
     }
   };
 

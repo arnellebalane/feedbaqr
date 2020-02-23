@@ -1,19 +1,16 @@
-import React, { useState, useRef, useContext } from 'react';
-import { FirebaseContext } from 'gatsby-plugin-firebase';
+import React, { useState, useRef } from 'react';
 
+import { useFeedbackCreator } from '../lib/firebase-hooks';
 import { SubjectPropType } from '../lib/custom-prop-types';
 import '../styles/index.css';
 
 const FeedbackForm = ({ subject }) => {
-  const firebase = useContext(FirebaseContext);
   const [data, setData] = useState({ text: '', image: null });
-  const [loading, setLoading] = useState(false);
   const fileElementRef = useRef(null);
+  const feedbackCreator = useFeedbackCreator(subject);
 
-  // On first render, the value provided in FirebaseContext is null, and we
-  // need to handle this ourselves.
-  // https://www.gatsbyjs.org/packages/gatsby-plugin-firebase/#firebasecontext
-  if (!firebase) return null;
+  if (!feedbackCreator) return null;
+  const { loading, createFeedback } = feedbackCreator;
 
   const enableSubmit = (data.text || data.image) && !loading;
 
@@ -27,31 +24,10 @@ const FeedbackForm = ({ subject }) => {
 
   const handleSubmit = async event => {
     event.preventDefault();
-    setLoading(true);
-
-    const feedbacksRef = firebase
-      .firestore()
-      .doc(`subjects/${subject.id}`)
-      .collection('feedbacks');
-
-    const feedbackRef = await feedbacksRef.add({
-      text: data.text,
-      createdOn: new Date(),
-    });
-
-    if (data.image) {
-      const fileType = data.image.type.replace(/^image\//, '');
-      const fileName = `${feedbackRef.id}.${fileType}`;
-      const fileRef = firebase.storage().ref(fileName);
-
-      await fileRef.put(data.image);
-      const fileUrl = await fileRef.getDownloadURL();
-      await feedbackRef.update({ image: fileUrl });
-    }
+    await createFeedback(data);
 
     fileElementRef.current.value = null;
     setData({ text: '', image: null });
-    setLoading(false);
   };
 
   return (
