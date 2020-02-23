@@ -3,14 +3,14 @@ import { FirebaseContext } from 'gatsby-plugin-firebase';
 import Firebase from 'firebase';
 import mapValues from 'lodash/mapValues';
 
-function convertTimestampsToDate(object) {
+const convertTimestampsToDate = object => {
   return mapValues(object, value => {
     if (value instanceof Firebase.firestore.Timestamp) {
       return value.toDate();
     }
     return value;
   });
-}
+};
 
 export const useSubjectCreator = () => {
   const firebase = useContext(FirebaseContext);
