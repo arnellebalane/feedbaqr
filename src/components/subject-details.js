@@ -1,5 +1,6 @@
 import React from 'react';
 import QRCode from 'qrcode.react';
+
 import logo from '../images/logo.png';
 import '../styles/index.css';
 

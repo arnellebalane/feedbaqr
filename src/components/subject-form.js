@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { FirebaseContext } from 'gatsby-plugin-firebase';
+
 import logo from '../images/logo.png';
 import '../styles/index.css';
 

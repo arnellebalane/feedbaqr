@@ -1,5 +1,6 @@
 import React, { useState, useRef, useContext } from 'react';
 import { FirebaseContext } from 'gatsby-plugin-firebase';
+
 import '../styles/index.css';
 
 const FeedbackForm = ({ subject }) => {
