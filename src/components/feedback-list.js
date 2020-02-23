@@ -1,5 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Image } from 'cloudinary-react';
+
+import { FeedbackPropType } from '../lib/custom-prop-types';
 
 const FeedbackItem = ({ feedback }) => (
   <Image
@@ -28,6 +31,10 @@ const FeedbackList = ({ feedbacks }) => {
       </ul>
     </>
   );
+};
+
+FeedbackList.propTypes = {
+  feedbacks: PropTypes.arrayOf(FeedbackPropType).isRequired,
 };
 
 export default FeedbackList;

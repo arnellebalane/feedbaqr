@@ -1,6 +1,7 @@
 import React from 'react';
 import QRCode from 'qrcode.react';
 
+import { SubjectPropType } from '../lib/custom-prop-types';
 import logo from '../images/logo.png';
 import '../styles/index.css';
 
@@ -21,6 +22,10 @@ const SubjectDetails = ({ subject }) => {
       </div>
     </div>
   );
+};
+
+SubjectDetails.propTypes = {
+  subject: SubjectPropType.isRequired,
 };
 
 export default SubjectDetails;

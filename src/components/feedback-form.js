@@ -1,6 +1,7 @@
 import React, { useState, useRef, useContext } from 'react';
 import { FirebaseContext } from 'gatsby-plugin-firebase';
 
+import { SubjectPropType } from '../lib/custom-prop-types';
 import '../styles/index.css';
 
 const FeedbackForm = ({ subject }) => {
@@ -90,6 +91,10 @@ const FeedbackForm = ({ subject }) => {
       </button>
     </form>
   );
+};
+
+FeedbackForm.propTypes = {
+  subject: SubjectPropType.isRequired,
 };
 
 export default FeedbackForm;

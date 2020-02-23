@@ -1,5 +1,16 @@
 import { useState, useEffect, useContext } from 'react';
+import firebase from 'firebase';
 import { FirebaseContext } from 'gatsby-plugin-firebase';
+import mapValues from 'lodash/mapValues';
+
+function convertTimestampsToDate(object) {
+  return mapValues(object, value => {
+    if (value instanceof firebase.firestore.Timestamp) {
+      return value.toDate();
+    }
+    return value;
+  });
+}
 
 export default function useSubject(subjectId) {
   const firebase = useContext(FirebaseContext);
@@ -17,7 +28,10 @@ export default function useSubject(subjectId) {
       setExists(subjectExists);
       if (!subjectExists) return null;
 
-      const subjectData = { ...subjectSnapshot.data(), id: subjectId };
+      const subjectData = convertTimestampsToDate({
+        ...subjectSnapshot.data(),
+        id: subjectId,
+      });
       setSubject(subjectData);
 
       const feedbacksRef = subjectRef
@@ -25,7 +39,7 @@ export default function useSubject(subjectId) {
         .orderBy('createdOn', 'desc');
       feedbacksRef.onSnapshot(feedbackSnapshot => {
         const feedbacks = feedbackSnapshot.docs.map(docSnapshot =>
-          docSnapshot.data()
+          convertTimestampsToDate(docSnapshot.data())
         );
         setSubject({ ...subjectData, feedbacks });
       });

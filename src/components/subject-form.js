@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import PropTypes from 'prop-types';
 import { FirebaseContext } from 'gatsby-plugin-firebase';
 
 import logo from '../images/logo.png';
@@ -72,6 +73,10 @@ const SubjectForm = ({ onSubmit }) => {
       </button>
     </form>
   );
+};
+
+SubjectForm.propTypes = {
+  onSubmit: PropTypes.instanceOf(Function),
 };
 
 export default SubjectForm;
